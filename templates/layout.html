@@ -25,7 +25,7 @@
               <!-- Navbar Right Side -->
               <div class="navbar-nav">
                 <a class="nav-item nav-link" onclick="document.location='login.html'" href="/login">Login</a>
-                <a class="nav-item nav-link" href="/register">Sign Up</a>
+                <a class="nav-item nav-link" onclick="document.location='signup.html'" href="/signup">Sign Up</a>
               </div>
             </div>
           </div>
@@ -34,6 +34,15 @@
       <main role="main" class="container">
         <div class="row">
           <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {%for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% end if %}
+            {% endwith %}
             {% block content %}{% endblock %}
           </div>
           <div class="col-md-4">
