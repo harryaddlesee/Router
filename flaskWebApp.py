@@ -13,7 +13,7 @@ def home():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@climb.com' and form.password.data == 'password':
+        if form.username.data == 'climberboy' and form.password.data == 'password':
             flash('Login Successful!', 'success')
             return redirect(url_for('home'))
         else:
