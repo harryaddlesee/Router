@@ -19,13 +19,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="/">Home</a>
-                <a class="nav-item nav-link" href="/about">About</a>
+                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
               </div>
               <!-- Navbar Right Side -->
               <div class="navbar-nav">
-                <a class="nav-item nav-link" onclick="document.location='login.html'" href="/login">Login</a>
-                <a class="nav-item nav-link" onclick="document.location='signup.html'" href="/signup">Sign Up</a>
+                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                <a class="nav-item nav-link" href="{{ url_for('signup') }}">Sign Up</a>
               </div>
             </div>
           </div>
