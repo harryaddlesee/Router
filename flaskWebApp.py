@@ -3,14 +3,20 @@ from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from forms import SignUpForm, LoginForm
+from flask_login import LoginManager, UserMixin, login_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '91beeaba2c6f4ad1f8eacc6451945e16'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -43,8 +49,9 @@ def home():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.username.data == 'climberboy' and form.password.data == 'password':
-            flash('Login Successful!', 'success')
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
