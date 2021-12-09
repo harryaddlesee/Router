@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from forms import SignUpForm, LoginForm
-from flask_login import LoginManager, UserMixin, login_user
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '91beeaba2c6f4ad1f8eacc6451945e16'
@@ -47,6 +47,8 @@ def home():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -59,6 +61,8 @@ def login():
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = SignUpForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -72,6 +76,11 @@ def signup():
 @app.route("/about")
 def about():
     return render_template('about.html')
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)
