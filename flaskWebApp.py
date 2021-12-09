@@ -1,12 +1,14 @@
 from datetime import datetime
 from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 from forms import SignUpForm, LoginForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '91beeaba2c6f4ad1f8eacc6451945e16'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,8 +54,12 @@ def login():
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
-        flash(f'Account successfully created for {form.username.data}!','success')
-        return redirect(url_for('home'))
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Account successfully created! You are now able to login','success')
+        return redirect(url_for('login'))
     return render_template('signup.html', form=form)
 
 @app.route("/about")
