@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from forms import SignUpForm, LoginForm
+from forms import SignUpForm, LoginForm, PostForm
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
@@ -90,6 +90,15 @@ def logout():
 def account():
     image_file = url_for('static', filename='profilePics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file)
+
+@app.route("/post/add", methods=['GET', 'POST'])
+@login_required
+def add_post():
+    form = PostForm
+    if form.validate_on_submit():
+        flash('Post Created!', 'success')
+        return redirect(url_for('home'))
+     return render_template('create_post.html', title='Add Post', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
