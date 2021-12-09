@@ -6,7 +6,7 @@ from forms import SignUpForm, LoginForm
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '91beeaba2c6f4ad1f8eacc6451945e16'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLALCHEMY(app)
+db = SQLAlchemy(app)
 
 class User(db.model):
     id = db.Column(db.Integer, primary_key=True)
