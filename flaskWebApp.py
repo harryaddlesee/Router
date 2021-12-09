@@ -8,7 +8,7 @@ app.config['SECRET_KEY'] = '91beeaba2c6f4ad1f8eacc6451945e16'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
-class User(db.model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullanle=False)
     email = db.Column(db.String(120), unique=True, nullanle=False)
@@ -20,7 +20,7 @@ class User(db.model):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
 
-class Post(db.model):
+class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullanle=False)
     date_posted = db.Colum(db.DateTime, nullable=False, default=datetime.utcnow)
