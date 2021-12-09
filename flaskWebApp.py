@@ -92,7 +92,7 @@ def account():
 @app.route("/post/add", methods=['GET', 'POST'])
 @login_required
 def add_post():
-    form = PostForm
+    form = PostForm()
     if form.validate_on_submit():
         flash('Post Created!', 'success')
         return redirect(url_for('home'))
