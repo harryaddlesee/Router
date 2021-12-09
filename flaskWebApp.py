@@ -41,8 +41,6 @@ class Post(db.Model):
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
 
-
-
 @app.route("/")
 @app.route("/home")
 def home():
@@ -98,7 +96,7 @@ def add_post():
     if form.validate_on_submit():
         flash('Post Created!', 'success')
         return redirect(url_for('home'))
-     return render_template('create_post.html', title='Add Post', form=form)
+    return render_template('create_post.html', title='Add Post', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
