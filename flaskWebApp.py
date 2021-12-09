@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from forms import SignUpForm, LoginForm
-from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '91beeaba2c6f4ad1f8eacc6451945e16'
@@ -11,6 +11,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -20,7 +23,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
@@ -83,8 +86,10 @@ def logout():
     return redirect(url_for('home'))
 
 @app.route("/account")
+@login_required
 def account():
-    return render_template('account.html', title='Account')
+    image_file = url_for('static', filename='profilePics/' + current_user.image_file)
+    return render_template('account.html', title='Account', image_file=image_file)
 
 if __name__ == '__main__':
     app.run(debug=True)
