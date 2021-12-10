@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
