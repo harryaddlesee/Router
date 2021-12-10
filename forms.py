@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy(app)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
