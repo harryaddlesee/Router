@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, url_for, flash, redirect, abort
+from flask import Flask, render_template, url_for, flash, redirect, abort, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from forms import SignUpForm, LoginForm, PostForm
